@@ -1,0 +1,52 @@
+#!/usr/bin/python
+
+from jinja2 import Environment, FileSystemLoader
+from subprocess import check_call
+
+import os
+
+def nginx_get_configuration():
+	configuration = { }
+	# Get the nginx server name.
+	value = os.getenv('NGINX_SERVER_NAME', 'localhost')
+	configuration.update({ 'server_name': value })
+	# Get the port number nginx will listen on.
+	value = os.getenv('NGINX_PORT', 80)
+	configuration.update({ 'port': value })
+	# Get the SSL enabled flag.
+	value = os.getenv('NGINX_SSL_ENABLED', False)
+	configuration.update({ 'ssl_enabled': value })
+	# Get the SSL port number nginx will listen on.
+	value = os.getenv('NGINX_PORT', 443)
+	configuration.update({ 'ssl_port': value })
+	# Get the SSL certificate path.
+	value = os.getenv('NGINX_CERT_PATH', None)
+	configuration.update({ 'cert_path': value })
+	# Get the SSL key path.
+	value = os.getenv('NGINX_KEY_PATH', None)
+	configuration.update({ 'key_path': value })
+	return configuration
+
+def run(app, *args):
+	check_call([app] + list(args))
+
+def start(service):
+	check_call(['service', service, 'start'])
+
+def write(template, path):
+	with open(path, "wb") as output:
+		output.write(template)
+
+if __name__ == "__main__":
+	# Initialize Jinja2
+	loader = FileSystemLoader('/usr/share/nginx')
+	templates = Environment(loader = loader)
+	# Load the configuration into a dictionary.
+	configuration = nginx_get_configuration()
+	# Write site configuration file.
+	default = templates.get_template('default.template') \
+					   .render(configuration)
+	write(default, '/etc/nginx/sites-available/default')
+	# Start the container.
+	start('nginx')
+	run('tail', '-F', '/var/log/nginx/error.log')
