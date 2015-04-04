@@ -17,7 +17,7 @@ def nginx_get_configuration():
 	value = os.getenv('NGINX_SSL_ENABLED', False)
 	configuration.update({ 'ssl_enabled': value })
 	# Get the SSL port number nginx will listen on.
-	value = os.getenv('NGINX_PORT', 443)
+	value = os.getenv('NGINX_SSL_PORT', 443)
 	configuration.update({ 'ssl_port': value })
 	# Get the SSL certificate path.
 	value = os.getenv('NGINX_CERT_PATH', None)
