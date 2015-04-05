@@ -19,6 +19,6 @@ To run a standalone container with all the default settings.
 
 **NGINX_SSL_PORT** - The SSL port number nginx will listen on. (default: 443)
 
-**NGINX_CERT_PATH** - The SSL certificate path.
+**NGINX_CERT_PATH** - The SSL certificate path. (default: None)
 
-**NGINX_KEY_PATH** - The SSL key path.
+**NGINX_KEY_PATH** - The SSL key path. (default: None)
