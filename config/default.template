@@ -35,6 +35,8 @@ server {
 		# Uncomment to enable naxsi on this location
 		# include /etc/nginx/naxsi.rules
 		try_files $uri $uri/ /index.html;
+		add_header Cache-Control no-cache;                                               
+                expires off;
 	}
 	{% endif %}
 	# Only for nginx-naxsi used with nginx-naxsi-ui : process denied requests
@@ -107,6 +109,8 @@ server {
 
 	location / {
 		try_files $uri $uri/ /index.html;
+		add_header Cache-Control no-cache;                                               
+                expires off;
 	}
 }
 {% endif %}
